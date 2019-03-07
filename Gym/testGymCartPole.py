@@ -4,7 +4,7 @@ import numpy as np
 env = gym.make('CartPole-v0')
 
 max_number_of_steps = 200   # 每一场游戏的最高得分
-#---------获胜的条件是最近100场平均得分高于195----------11111--22222-33333--4444--《5  add on web》-
+#---------获胜的条件是最近100场平均得分高于195---》-
 goal_average_steps = 195
 num_consecutive_iterations = 100
 #----------------------------------------------------------
