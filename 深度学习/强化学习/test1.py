@@ -1,0 +1,39 @@
+#上面的代码只是使用np.random.choice([0, 1])随机决定小车运动的方向，
+# #并没有进行任何的智能学习。
+#运行代码，发现每场游戏的平均得分仅22左右
+import gym
+import numpy as np
+
+env = gym.make('CartPole-v0')
+
+max_number_of_steps = 200   # 每一场游戏的最高得分
+#---------获胜的条件是最近100场平均得分高于195-------------
+goal_average_steps = 195
+num_consecutive_iterations = 100
+#----------------------------------------------------------
+num_episodes = 5000 # 共进行5000场游戏
+last_time_steps = np.zeros(num_consecutive_iterations)  # 只存储最近100场的得分（可以理解为是一个容量为100的栈）
+
+# 重复进行一场场的游戏
+for episode in range(num_episodes):
+    observation = env.reset()   # 初始化本场游戏的环境.(这里的observation就是状态static,
+                                    #,这里返回的是初始状态 )
+    episode_reward = 0  # 初始化本场游戏的得分
+    # 一场游戏分为一个个时间步
+    for t in range(max_number_of_steps):
+        env.render()    # 更新并渲染游戏画面.就是刷新后显示画面.(比如小车到了一个新的地方)
+        action = np.random.choice([0, 1])   # 随机决定小车运动的方向  , 0: 向左走,  1 :向右走
+        observation, reward, done, info = env.step(action)  # 获取本次行动的反馈结果
+                                    #这里返回的状态(observation),是新状态. reward 是 新的 反馈(奖励惩罚)
+                                    # done=ture,就是游戏结束或者完成. info是调试用的信息.
+        episode_reward += reward    # 累计的总的反馈(所有的奖励惩罚的总和)
+        if done:   #如果游戏结束了(失败,或者完成任务)
+            print('%d Episode finished after %f time steps / mean %f' % (episode, t + 1, last_time_steps.mean()))
+            last_time_steps = np.hstack((last_time_steps[1:], [episode_reward]))    # 更新最近100场游戏的得分stack
+            break
+    # 如果最近100场平均得分高于195
+    if (last_time_steps.mean() >= goal_average_steps):    #计算一共用了多长的时间
+        print('Episode %d train agent successfuly!' % episode)
+        break
+
+print('Failed!')
