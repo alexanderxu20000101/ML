@@ -1,4 +1,4 @@
-#使用 RNN 进行情感分析的初学者指南 | 雷锋网 https://www.leiphone.com/news/201806/5QY2k0kEkf9d6xUA.html
+
 
 from keras.datasets import imdb
 vocabulary_size = 50      # 所有字符一共5000(故意改成50)
